@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+    background: #00AEA0;
+    padding: 0px;
+    margin: 0px;
+}
+
+/* size and position of the map */
+svg {
+    height: 420px;
+    width: 950px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    position: relative;
+    left: -20px;
+}
+    
+/* style map lines */
+svg path {
+    fill: #00AEA0;
+    background: #00AEA0;
+    stroke: black;
+}
+
+svg circle {
+    fill: white;
+    stroke: white;
+}
+
+</style>
+
+<body>
+    <script src="static/scripts/d3.v3.min.js"></script>
+    <script src="static/scripts/topojson.v1.min.js"></script>
+    <script src="static/scripts/d3.geo.projection.v0.min.js"></script>
+    <script>
+        var geoDataFilename = 'static/json/landtopo.json'
+            svg = d3.select('body')
+                .append('svg');
+
+        d3.json(geoDataFilename, function(error, geoJsonData) {
+            if (error) return console.error(error);
+
+            var projection = d3.geo.miller(),
+                path = d3.geo.path()
+                    .projection(projection),
+                data = [
+                    [-74.0059, 40.7127, 3, "New York"],
+                    [106.8000, -6.2000, 11, "Jakarta"],
+                    [-79.4, 43.7, 4, "Toronto"],
+                    [-75.1667, 39.95, 5.5, "Philadelphia"],
+                    [91.8, 22.3667, 7, "Chittagong"],
+                    [73.02, 26.28, 1, "Jodhpur"]
+                ];
+
+            // show the world
+            svg.append('path')
+                .datum(topojson.feature(geoJsonData, geoJsonData.objects.landgeo))
+                //.datum(geoJsonData)
+                .attr('d', path);
+
+            // mark cities
+            svg.selectAll("circle")
+                .data(data, function(d) {
+                    console.log(d);
+                    return d;
+                })
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) {
+                    var cx = projection([d[0], d[1]])[0];
+                    return cx;
+                })
+                .attr("cy", function(d) {
+                    var cy = projection([d[0], d[1]])[1];
+                    return cy;
+                })
+                .attr("r", function(d) {
+                    return d[2];   
+                });
+        });
+
+    </script>
+</body>
