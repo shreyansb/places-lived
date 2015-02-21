@@ -1,89 +1,115 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <
+        <style>
+            body {
+                background: #00AEA0;
+                padding: 0px;
+                margin: 0px;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            }
 
-body {
-    background: #00AEA0;
-    padding: 0px;
-    margin: 0px;
-}
+            #title {
+                width: 210px;
+                margin-left: auto;
+                margin-right: auto;
+                color: white;
+            }
 
-/* size and position of the map */
-svg {
-    height: 420px;
-    width: 950px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    position: relative;
-    left: -20px;
-}
-    
-/* style map lines */
-svg path {
-    fill: #00AEA0;
-    background: #00AEA0;
-    stroke: black;
-}
+            /* map container */
+            svg {
+                height: 420px;
+                width: 950px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 50px;
+                position: relative;
+                left: -20px;
+            }
+                
+            /* map lines */
+            svg path {
+                fill: #00AEA0;
+                background: #00AEA0;
+                stroke: black;
+            }
 
-svg circle {
-    fill: white;
-    stroke: white;
-}
+            /* map markers */
+            svg circle {
+                fill: white;
+                stroke: white;
+            }
+        </style>
+    </head>
 
-</style>
-
-<body>
-    <script src="static/scripts/d3.v3.min.js"></script>
-    <script src="static/scripts/topojson.v1.min.js"></script>
-    <script src="static/scripts/d3.geo.projection.v0.min.js"></script>
-    <script>
-        var geoDataFilename = 'static/json/landtopo.json'
-            svg = d3.select('body')
-                .append('svg');
-
-        d3.json(geoDataFilename, function(error, geoJsonData) {
-            if (error) return console.error(error);
-
-            var projection = d3.geo.miller(),
-                path = d3.geo.path()
-                    .projection(projection),
-                data = [
-                    [-74.0059, 40.7127, 3, "New York"],
+    <body>
+        <h2 id="title">Places we've lived</h2>
+        <div id="map"></div>
+        <script src="static/scripts/d3.v3.min.js"></script>
+        <script src="static/scripts/topojson.v1.min.js"></script>
+        <script src="static/scripts/d3.geo.projection.v0.min.js"></script>
+        <script>
+            var geoDataFilename = 'static/json/landtopo.json',
+                svg = d3.select('#map').append('svg'),
+                mapData = [ 
+                    // shreyans
                     [106.8000, -6.2000, 11, "Jakarta"],
+                    [91.8, 22.3667, 6, "Chittagong"],
+                    [-74.0059, 40.7127, 4, "New York"],
                     [-79.4, 43.7, 4, "Toronto"],
-                    [-75.1667, 39.95, 5.5, "Philadelphia"],
-                    [91.8, 22.3667, 7, "Chittagong"],
-                    [73.02, 26.28, 1, "Jodhpur"]
+                    [73.02, 26.28, 1, "Jodhpur"],
+                    // chris
+                    [-122.1700, 37.4300, 4, "Stanford"],
+                    [8.5500, 47.3667, 2, "Zurich"],
+                    [-99.1333, 19.000, 2, "Mexico City"],
+                    [-47.8828, -15.7939, 2, "Brasilia"],
+                    // becca
+                    [-104.9903, 39.7392, 14, "Denver"],
+                    [-157.8167, 21.3000, 2, "Honolulu"],
+                    // kuba
+                    [18.9500, 50.3833, 13, "Piekary Śląskie"],
+                    [-87.6847, 41.8369, 5, "Chicago"],
+                    // ahmed
+                    [32.5333, 15.6333, 5, "Khartoum"],
+                    [-79.6500, 43.6000, 13, "Mississagua"],
+                    // david
+                    [-96.6992, 33.0197, 5, "Plano"],
+                    [121.6333, 25.0333, 3, "Taipei"]
                 ];
 
-            // show the world
-            svg.append('path')
-                .datum(topojson.feature(geoJsonData, geoJsonData.objects.landgeo))
-                //.datum(geoJsonData)
-                .attr('d', path);
+            d3.json(geoDataFilename, function(error, geoJsonData) {
+                if (error) return console.error(error);
 
-            // mark cities
-            svg.selectAll("circle")
-                .data(data, function(d) {
-                    console.log(d);
-                    return d;
-                })
-                .enter()
-                .append("circle")
-                .attr("cx", function(d) {
-                    var cx = projection([d[0], d[1]])[0];
-                    return cx;
-                })
-                .attr("cy", function(d) {
-                    var cy = projection([d[0], d[1]])[1];
-                    return cy;
-                })
-                .attr("r", function(d) {
-                    return d[2];   
-                });
-        });
+                /* set up the map */
+                var projection = d3.geo.miller(),
+                    path = d3.geo.path()
+                        .projection(projection);
 
-    </script>
-</body>
+                // show the world
+                svg.append('path')
+                    .datum(topojson.feature(geoJsonData, geoJsonData.objects.landgeo))
+                    .attr('d', path);
+
+                // mark cities
+                svg.selectAll("circle")
+                    .data(mapData)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) {
+                        var cx = projection([d[0], d[1]])[0];
+                        return cx;
+                    })
+                    .attr("cy", function(d) {
+                        var cy = projection([d[0], d[1]])[1];
+                        return cy;
+                    })
+                    .attr("r", function(d) {
+                        return Math.sqrt(d[2]) * 2
+                    });
+            });
+        </script>
+    </body>
+</html>
