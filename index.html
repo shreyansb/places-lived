@@ -87,7 +87,7 @@
             d3.json(geoDataFilename, function(error, geoJsonData) {
                 if (error) return console.error(error);
 
-                /* set up the map */
+                // set up the map
                 var projection = d3.geo.miller(),
                     path = d3.geo.path()
                         .projection(projection);
