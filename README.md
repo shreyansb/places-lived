@@ -1,10 +1,13 @@
-places-lived
+A map of places we've lived
 ============
 
-Customizing a d3 world map to show the places I've lived, with marker size corresponding to years spent in the place.
+A custom world map, made with D3.js, showing the places Team [Socratic](https://socratic.org) has lived.
 
-Raw data from [Natural Earth](www.naturalearthdata.com/downloads/110m-physical-vectors/), converted to TopoJSON (see notes).
+![](https://d262ilb51hltx0.cloudfront.net/max/800/1*_a9qYHaz8Nf9yiwnbJgd1g.png)
+
+Thanks to:
+[Let's make a map](http://bost.ocks.org/mike/map/) by Mike Bostock
+[Natural Earth](www.naturalearthdata.com/downloads/110m-physical-vectors/), for GeoJSON/TopoJSON data.
 
 Demo at [bl.ocks.org/shreyansb/c6c40a88a28e64b479ab](http://bl.ocks.org/shreyansb/c6c40a88a28e64b479ab)
-
-Notes on downloading and converting the raw geo data: [https://gist.github.com/shreyansb/c72703305227cb561575](https://gist.github.com/shreyansb/c72703305227cb561575)
+TopoJSON notes: [https://gist.github.com/shreyansb/c72703305227cb561575](https://gist.github.com/shreyansb/c72703305227cb561575)
